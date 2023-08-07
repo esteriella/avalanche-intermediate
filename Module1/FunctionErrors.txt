@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.18;
+
+contract FunctionErrors {
+
+    // subtract a number from another with a require statement
+    function requireFunction(uint a, uint b) public pure returns (uint) {
+        // check if the b is greater than zero
+        require(b != 0, "You cannot subtract by zero");
+
+        // perform the subtraction and return the result
+        return a - b;
+    }
+
+    // the use of assert statement
+    function assertFunction() public pure {
+        uint result = requireFunction(6, 3);
+        // asserting the result to be equal to 4 which will cause the transaction to fail
+        assert(result == 4);
+    }
+
+    // the use of revert statement
+    function revertFunction() public pure {
+        uint result = requireFunction(6, 3);
+
+        // revert the transaction if the result is equal to 3
+        if(result == 3){
+            revert("This function will revert");
+        }
+    }
+}
