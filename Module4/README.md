@@ -3,50 +3,53 @@
 
 This is a Solidity contract pertaining to the DegenToken, an ERC20 token that has been deployed onto the Avalanche network. This contract expands upon the capabilities of the OpenZeppelin `ERC20` and `Ownable` contracts, furnishing a range of functionalities including token minting, transferring, redeeming, burning, as well as the ability to verify token balances.
 
-## Usage
+## Prerequisites
 
-To use the project, downdload the code or clone the repository, run the following command:
-
-`npm install`
-
-To deploy the project, run the following command:
-
-`npx hardhat run scripts/deploy.js --network fuji`
-
-To verify the smart contract, run the following command:
-
-`npx hardhat verify 'your-contract-address' --network fuji`
+- Solidity Compiler (version ^0.8.18 recommended)
+- Remix for testing
+- Hardhat
 
 ## Contract Details
 
 - Contract Name: DegenToken
 - Symbol: DGN
 
-## Functions
+## Features
 
-### constructor
+- Minting new tokens by the contract owner.
+- Transferring tokens between accounts with an event emission.
+- Redeeming tokens based on user input, with randomized item redemptions.
+- Getting balance of user to know the amount of token the user has.
+- Burning (destroying) tokens by the token owner.
+- Event emission for token transfers, redemptions, and burns.
+  
+## Usage
 
-The constructor initializes the token with the name "Degen" and the symbol "DGN". It is executed only once during contract deployment.
+### Deployment and Verification on Snowtrace
 
-### mint
+1. To use the project, downdload the code or clone the repository, run the following command:
+   `npm install`.
 
-This function allows the owner of the contract to create and distribute new tokens.
+2. Deploy the contract to Avalanche Fuji network by running the following command:
+   `npx hardhat run scripts/deploy.js --network fuji`
 
-### transfer
+3. To verify the smart contract, run the following command:
 
-This function allows token holders to transfer their tokens to another address.
+  `npx hardhat verify 'your-contract-address' --network fuji`
 
-### redeem
+### Testing on Remix
 
-This function allows token holders to burn their tokens in exchange for some specific rewards.
+1. Deploy the `DegenToken` contract to the Ethereum network.
 
-### burn
+2. Use a wallet to interact with the contract's functions:
+   - Mint new tokens using the `mint` function, accessible only by the owner.
+   - Transfer tokens using the standard ERC20 `transfer` function.
+   - Redeem tokens using the `redeemTokens` function with a specified amount.
+   - Get balance of user by calling the `getBalance` function.
+   - Burn tokens using the `burn` function, accessible by token holders.
 
-This function allows anyone to burn tokens they own.
+3. Explore the emitted events to track transfers, redemptions, and burns.
 
-### balanceOf
-
-This function gives the balance of the specified account that its address is provided.
 
 ## Author
 
