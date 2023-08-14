@@ -43,6 +43,7 @@ contract DegenToken is ERC20, Ownable {
                 (block.difficulty, block.timestamp, block.number, msg.sender)
             )
         );
+
         // generate random number between 1 and 3
         uint256 itemId = (randomNumber % 3) + 1; 
 
