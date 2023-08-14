@@ -8,10 +8,16 @@ contract DegenToken is ERC20, Ownable {
 
     constructor() ERC20("Degen", "DGN") {}
 
-    event RedeemToken(address account, uint rewardCategory);
-    event BurnToken(address account, uint amount);
+    // event emitted when tokens are transferred between accounts
     event TransferToken(address from, address to, uint amount);
 
+    // event emitted when a token redemption occurs
+    event RedeemToken(address account, uint itemId);
+
+    // event emitted when tokens are burned (destroyed)
+    event BurnToken(address account, uint amount);
+
+    // function to mint tokens
     // onlyOwner modifier allows only the user to execute the function
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
@@ -21,48 +27,67 @@ contract DegenToken is ERC20, Ownable {
     // override the transfer function in ERC20
     function transfer(address to, uint256 amount) public override returns (bool) {
         _transfer(_msgSender(), to, amount);
+        // emit the transfer event
+        emit TransferToken(msg.sender, to, amount);
         return true;
     }
 
-    // function for balanceOf function of ERC20
-    function getBalance() public view returns (uint){
-        return balanceOf(msg.sender);
-    }
-
-    // function to get the game store
-    function gameStore() public pure returns(string memory) {
-        // Return a string indicating that the caller can get a random amount between 0 and 1000
-        return "get random Amount = [0-1000]";
-    }
-
     // function to redeem tokens based on user input
-    function reedemTokens(uint _userInput) external payable {
-        // Check if the user input is valid
-        require(_userInput == 1, "Invalid selection");
+    function redeemTokens(uint256 _amount) external {
+        // require that the input amount is at least 50 tokens for redemption
+        require(_amount >= 50, "Minimum amount required for redemption: 50 tokens");
 
-        // If the user input is 1, proceed with the redemption
-        if (_userInput == 1) {
-            // Generate random numbers based on the current timestamp and the caller's address
-            uint amount = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 100;
-            uint amount2 = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 10;
+        // generate a random number using block data and caller's address
+        uint256 randomNumber = uint256(keccak256
+            (abi.encode
+                (block.difficulty, block.timestamp, block.number, msg.sender)
+            )
+        );
+        // generate random number between 1 and 3
+        uint256 itemId = (randomNumber % 3) + 1; 
 
-            // Check if the caller has sufficient balance for this redemption
-            require(balanceOf(msg.sender) >= 200, "Insufficient Balance for this redemption");
+        // calculate the redemption multiplier based on the generated itemId
+        uint256 redemptionMultiplier;
 
-            // Calculate the final redemption amount
-            uint finalAmount = amount * amount2;
-
-            // Approve the caller to transfer the final amount of tokens
-            approve(msg.sender, finalAmount);
-
-            // Transfer the final amount of tokens from the caller to the contract owner
-            transferFrom(msg.sender, owner(), finalAmount);
+        if (itemId == 1) {
+            // redeem amount will be doubled for Item 1
+            redemptionMultiplier = 2; 
+        } else if (itemId == 2) {
+            // redeem amount will be tripled for Item 2
+            redemptionMultiplier = 3; 
+        } else {
+            // redeem amount will be quintupled for Item 3
+            redemptionMultiplier = 5; 
         }
+
+        // calculate the final redemption amount 
+        // based on the input amount and multiplier
+        uint256 finalAmount = _amount * redemptionMultiplier;
+
+        // require that the caller's balance is sufficient for the redemption
+        require(balanceOf(msg.sender) >= finalAmount, 
+            "Insufficient Balance for this redemption"
+        );
+
+        // deduct tokens from the caller's balance
+        _burn(msg.sender, finalAmount); 
+
+        // emit event of the redeemed item
+        emit RedeemToken(msg.sender, itemId);
+    }
+
+    // function to get balance of a user
+    function getBalance() public view returns (uint){
+        // get the balance of the caller using 
+        // balanceOf function of ERC20
+        return balanceOf(msg.sender);
     }
 
     // function to access the private _burn function of ERC20
     function burn(uint amount) public {
         _burn(msg.sender, amount);
+
+        // emit the burn event
         emit BurnToken(msg.sender, amount);
     }
 }
