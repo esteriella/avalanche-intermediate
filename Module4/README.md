@@ -27,11 +27,14 @@ This is a Solidity contract pertaining to the DegenToken, an ERC20 token that ha
 
 ### Deployment and Verification on Snowtrace
 
-1. To use the project, downdload the code or clone the repository, run the following command: `npm install`.
+1. To use the project, downdload the code or clone the repository, run the following command:
+   - `npm install`.
 
-2. Deploy the contract to Avalanche Fuji network by running the following command: `npx hardhat run scripts/deploy.js --network fuji`
+2. Deploy the contract to Avalanche Fuji network by running the following command:
+   - `npx hardhat run scripts/deploy.js --network fuji`
 
-3. To verify the smart contract, run the following command: `npx hardhat verify 'your-contract-address' --network fuji`
+3. To verify the smart contract, run the following command:
+   - `npx hardhat verify 'your-contract-address' --network fuji`
 
 ### Testing on Remix
 
