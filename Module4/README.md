@@ -7,7 +7,7 @@ This is a Solidity contract pertaining to the DegenToken, an ERC20 token that ha
 
 - Solidity Compiler (version ^0.8.18 recommended)
 - Remix for testing
-- Hardhat
+- Hardhat for deployment and verification
 
 ## Contract Details
 
